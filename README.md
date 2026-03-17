@@ -1,43 +1,63 @@
-# PDF Range Extractor
+# PDF Toolkit
 
-A small, extremely simple macOS desktop application that extracts specific page ranges from a PDF and saves them into a new PDF. 
+A collection of lightweight, local PDF utilities for macOS.
 
-## Description
-This tiny utility allows you to drag a PDF file into the window, specify exactly which pages you want to keep, and save a new PDF containing only those pages. It handles both single pages and ranges, maintaining the exact order you provide.
+## Tools
 
-## Features
-- **Drag and Drop Interface**: Easily load PDFs by dragging them into the application.
-- **Support for Page Ranges**: Handles formats like `1-5, 8, 10-12`.
-- **Validation**: Automatically checks page numbers against the total length of the document.
-- **Automatic Naming**: Suggests a filename like `originalname_extracted.pdf`.
-- **Standalone Layout**: Simple, vertical UI for quick operation.
+### 1. PDF Range Extractor (Desktop Utility)
+
+A simple Tkinter-based application to extract specific page ranges from a PDF.
+
+- **Features**: Drag and drop, page range parsing (`1-5, 8`), validation, and automatic naming.
+- **Entry Point**: `python main.py`
+
+### 2. PDF Merge Tool (Local Web App)
+
+A modern, monochrome web interface for merging multiple PDF files.
+
+- **Features**:
+  - **Premium Monochrome Design**: Sleek black and white UI with high-contrast elements.
+  - **Drag-and-Drop Reordering**: Use SortableJS to arrange files before merging.
+  - **Local Processing**: No cloud dependencies, everything stays on your machine.
+- **Entry Point**: `python pdf_extractor/server.py`
+
+---
 
 ## Installation
-1. Ensure you have Python 3.10 or higher installed on your macOS.
-2. Clone or download this repository to your local machine.
-3. Open your terminal and navigate to the project folder.
-4. Install the required dependencies:
+
+1. Ensure you have Python 3.10+ installed.
+2. Install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
 
+   *Note: For the desktop app, `tkinterdnd2` is required. For the web app, `flask` is required.*
+
 ## Usage
-1. Run the application using Python:
-   ```bash
-   python main.py
-   ```
-2. **Drag a PDF file** into the designated gray area within the window.
-3. Enter your desired **Page Ranges** in the text field.
-   - Example: `1-5,8,10-12`
-   - This will extract pages 1 through 5, page 8, and pages 10 through 12.
-4. Click the **Create New PDF** button.
-5. Choose where to save your new PDF file.
-6. Check the **Status** area for success messages or error reports.
+
+### Using the Desktop Extractor
+
+1. Run: `python main.py`
+2. Drag a PDF into the window.
+3. Enter ranges (e.g., `1-3, 7`) and click "Create New PDF".
+
+### Using the Web Merge Tool
+
+1. Run: `python pdf_extractor/server.py`
+2. Open your browser to `http://127.0.0.1:5000`.
+3. Drag files into the drop zone, reorder them, and click "Merge PDFs".
 
 ## Project Structure
-- `main.py`: Entry point for the application.
-- `gui.py`: Contains all GUI logic and window layout.
-- `pdf_utils.py`: Contains the page range parser and PDF extraction logic.
-- `requirements.txt`: List of Python dependencies.
-- `.gitignore`: Files to exclude from Git.
-- `README.md`: This file.
+
+- `main.py`: Entry point for the desktop app.
+- `pdf_extractor/server.py`: Entry point for the web merge tool.
+- `pdf_extractor/static/`: CSS (monochrome) and JS (SortableJS) for the web UI.
+- `pdf_extractor/templates/`: HTML templates for the web UI.
+- `gui.py`: Tkinter GUI logic.
+- `pdf_utils.py`: Shared PDF processing logic (extraction and merging).
+- `.gitignore`: Configured to ignore `input/`, `output/`, and `ready to print/` folders.
+
+## Development Note
+
+The web UI recently underwent a design overhaul to implement a **strictly monochrome (B&W) theme**, providing a high-contrast, professional aesthetic.
