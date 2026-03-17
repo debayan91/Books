@@ -3,7 +3,8 @@ import uuid
 import tempfile
 from flask import Flask, render_template, request, send_file, jsonify
 from werkzeug.utils import secure_filename
-from pdf_utils import merge_pdfs
+from pdf_utils import merge_pdfs, extract_pages, extract_and_merge
+from pypdf import PdfReader
 
 app = Flask(__name__)
 # Max file upload size of 100MB
@@ -75,5 +76,96 @@ def merge():
         merged_path, 
         as_attachment=True, 
         download_name='merged.pdf', 
+        mimetype='application/pdf'
+    )
+
+@app.route('/info', methods=['POST'])
+def get_pdf_info():
+    data = request.json
+    if not data or 'file' not in data:
+        return jsonify({'error': 'No file specified'}), 400
+        
+    file_id = data['file']
+    clean_fid = secure_filename(file_id)
+    path = os.path.join(app.config['UPLOAD_FOLDER'], clean_fid)
+    
+    if not os.path.exists(path):
+        return jsonify({'error': f'File {clean_fid} not found on server'}), 404
+        
+    try:
+        reader = PdfReader(path)
+        total_pages = len(reader.pages)
+        return jsonify({'pages': total_pages})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/extract', methods=['POST'])
+def extract():
+    data = request.json
+    if not data or 'file' not in data:
+        return jsonify({'error': 'No file specified'}), 400
+        
+    file_id = data['file']
+    ranges_str = data.get('ranges', '')
+    
+    clean_fid = secure_filename(file_id)
+    path = os.path.join(app.config['UPLOAD_FOLDER'], clean_fid)
+    
+    if not os.path.exists(path):
+        return jsonify({'error': f'File {clean_fid} not found on server'}), 404
+        
+    extracted_path = os.path.join(tempfile.gettempdir(), f'extracted_{uuid.uuid4().hex}.pdf')
+    
+    try:
+        extract_pages(path, ranges_str, extracted_path)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        
+    return send_file(
+        extracted_path, 
+        as_attachment=True, 
+        download_name='extracted.pdf', 
+        mimetype='application/pdf'
+    )
+
+@app.route('/extract_merge', methods=['POST'])
+def extract_and_merge_route():
+    data = request.json
+    if not data or 'files' not in data:
+        return jsonify({'error': 'No files specified'}), 400
+        
+    files_info = data['files']
+    if len(files_info) < 1:
+        return jsonify({'error': 'Select at least one file to process'}), 400
+        
+    files_data = []
+    
+    for item in files_info:
+        file_id = item.get('id')
+        if not file_id:
+            continue
+            
+        clean_fid = secure_filename(file_id)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], clean_fid)
+        
+        if os.path.exists(path):
+            files_data.append({
+                'path': path,
+                'ranges': item.get('ranges', '')
+            })
+        else:
+            return jsonify({'error': f'File {clean_fid} not found on server'}), 404
+            
+    merged_path = os.path.join(tempfile.gettempdir(), f'extract_merge_{uuid.uuid4().hex}.pdf')
+    
+    try:
+        extract_and_merge(files_data, merged_path)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        
+    return send_file(
+        merged_path, 
+        as_attachment=True, 
+        download_name='extracted_and_merged.pdf', 
         mimetype='application/pdf'
     )
