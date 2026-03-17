@@ -85,16 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function showStatus(message, type = 'info') {
         statusMessage.textContent = message;
         // Reset classes
-        statusMessage.classList.remove('hidden', 'bg-blue-50', 'text-blue-700', 'border-blue-200', 
-                                       'bg-green-50', 'text-green-700', 'border-green-200', 
-                                       'bg-rose-50', 'text-rose-700', 'border-rose-200');
+        statusMessage.classList.remove('hidden', 'bg-zinc-50', 'text-zinc-600', 'border-zinc-200', 
+                                       'bg-zinc-100', 'text-black', 'border-black', 
+                                       'bg-black', 'text-white', 'border-black');
         
         if (type === 'error') {
-            statusMessage.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-200');
+            statusMessage.classList.add('bg-black', 'text-white', 'border-black');
         } else if (type === 'success') {
-            statusMessage.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+            statusMessage.classList.add('bg-zinc-100', 'text-black', 'border-black');
         } else {
-            statusMessage.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
+            statusMessage.classList.add('bg-zinc-50', 'text-zinc-600', 'border-zinc-200');
         }
     }
 
