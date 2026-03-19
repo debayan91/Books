@@ -25,6 +25,7 @@
                 <button id="tab-btn-extract" class="tab-btn flex-1 py-4 px-1 text-center font-bold text-sm uppercase tracking-wider border-b-2 text-black border-black focus:outline-none transition-colors">Extract</button>
                 <button id="tab-btn-merge" class="tab-btn flex-1 py-4 px-1 text-center font-bold text-sm uppercase tracking-wider border-b-2 text-zinc-400 border-transparent hover:text-black focus:outline-none transition-colors">Merge</button>
                 <button id="tab-btn-extract-merge" class="tab-btn flex-1 py-4 px-1 text-center font-bold text-sm uppercase tracking-wider border-b-2 text-zinc-400 border-transparent hover:text-black focus:outline-none transition-colors">Extract + Merge</button>
+                <button id="tab-btn-compress" class="tab-btn flex-1 py-4 px-1 text-center font-bold text-sm uppercase tracking-wider border-b-2 text-zinc-400 border-transparent hover:text-black focus:outline-none transition-colors">Compress</button>
             </div>
 
             <!-- Tab 1: Extract -->
@@ -42,7 +43,19 @@
                     <p class="text-sm text-zinc-500 mb-4" id="extract-pagecount">Total Pages: ...</p>
                     
                     <label class="block text-sm font-bold text-black mb-2 uppercase tracking-wide">Page Ranges</label>
-                    <input type="text" id="extract-ranges" placeholder="e.g. 1-5,8,10-12" class="w-full border border-black/20 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black">
+                    <input type="text" id="extract-ranges" placeholder="e.g. 1-5,8,10-12" class="w-full border border-black/20 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black mb-4">
+                    
+                    <label class="block text-sm font-bold text-black mb-2 uppercase tracking-wide">Mode</label>
+                    <div class="flex gap-4 mb-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="extract-mode" value="extract" checked class="w-4 h-4 text-black focus:ring-black border-black/20">
+                            <span class="text-sm font-medium">Extract (single PDF)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="extract-mode" value="split" class="w-4 h-4 text-black focus:ring-black border-black/20">
+                            <span class="text-sm font-medium">Split (multiple PDFs)</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div id="status-extract" class="mt-6 text-center font-bold hidden rounded-xl px-5 py-3 w-full border border-black text-sm uppercase tracking-tight"></div>
@@ -100,6 +113,33 @@
                 <div id="status-em" class="mt-6 text-center font-bold hidden rounded-xl px-5 py-3 w-full border border-black text-sm uppercase tracking-tight"></div>
 
                 <button id="em-btn" class="mt-6 w-full bg-black text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-zinc-800 font-black text-lg uppercase tracking-widest disabled:opacity-20 disabled:cursor-not-allowed transition-all" disabled>Extract & Merge</button>
+            </div>
+
+            <!-- Tab 4: Compress -->
+            <div id="tab-compress" class="tab-content hidden">
+                <section>
+                    <div id="drop-zone-compress" class="border-2 border-dashed border-zinc-200 bg-zinc-50 rounded-2xl p-8 text-center transition-all duration-200 cursor-pointer flex flex-col items-center justify-center hover:bg-black hover:border-black group">
+                        <p class="text-xl text-zinc-800 font-semibold mb-2 group-hover:text-white">Drag a PDF here or browse</p>
+                        <input type="file" id="file-input-compress" accept=".pdf" class="hidden">
+                        <button id="browse-btn-compress" class="mt-4 bg-white border text-black border-black/10 px-6 py-2 rounded-xl shadow-sm hover:bg-black hover:text-white font-bold transition-all">Browse File</button>
+                    </div>
+                </section>
+                
+                <div id="compress-file-info" class="hidden mt-6 bg-zinc-50 border border-zinc-200 p-6 rounded-2xl">
+                    <p class="font-bold text-black" id="compress-filename">filename.pdf</p>
+                    <p class="text-sm text-zinc-500 mb-4" id="compress-pagecount">Total Pages: ...</p>
+                    
+                    <label class="block text-sm font-bold text-black mb-2 uppercase tracking-wide">Compression Level</label>
+                    <select id="compress-level" class="w-full border border-black/20 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black">
+                        <option value="low">Low Quality (/screen) - Best space saving</option>
+                        <option value="medium" selected>Medium Quality (/ebook)</option>
+                        <option value="high">High Quality (/printer)</option>
+                    </select>
+                </div>
+
+                <div id="status-compress" class="mt-6 text-center font-bold hidden rounded-xl px-5 py-3 w-full border border-black text-sm uppercase tracking-tight"></div>
+
+                <button id="compress-btn" class="mt-6 w-full bg-black text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-zinc-800 font-black text-lg uppercase tracking-widest disabled:opacity-20 disabled:cursor-not-allowed transition-all" disabled>Compress PDF</button>
             </div>
 
         </main>

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Tabs Logic ---
-    const tabs = ['extract', 'merge', 'extract-merge'];
+    const tabs = ['extract', 'merge', 'extract-merge', 'compress'];
     let currentTab = 'extract';
 
     tabs.forEach(tab => {
@@ -109,15 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
         showStatus('extract', 'Extracting...', 'info');
         btnExtract.disabled = true;
         try {
+            const extractMode = document.querySelector('input[name="extract-mode"]:checked').value;
             const response = await fetch('/extract', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ file: extractFileId, ranges: rangesExtract.value })
+                body: JSON.stringify({ file: extractFileId, ranges: rangesExtract.value, mode: extractMode })
             });
 
             if (response.ok) {
-                triggerDownload(await response.blob(), `Extracted_${filenameExtract.textContent}`);
-                showStatus('extract', 'Extraction complete!', 'success');
+                const ext = extractMode === 'split' ? '.zip' : '.pdf';
+                const filename = extractMode === 'split' ? `Split_${filenameExtract.textContent.replace('.pdf', '')}` + ext : `Extracted_${filenameExtract.textContent}`;
+                triggerDownload(await response.blob(), filename);
+                showStatus('extract', extractMode === 'split' ? 'Split complete!' : 'Extraction complete!', 'success');
             } else {
                 const err = await response.json();
                 showStatus('extract', err.error || 'Extraction failed', 'error');
@@ -129,6 +132,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Tab 4: Compress ---
+    const dropCompress = document.getElementById('drop-zone-compress');
+    const inputCompress = document.getElementById('file-input-compress');
+    const browseCompress = document.getElementById('browse-btn-compress');
+    const btnCompress = document.getElementById('compress-btn');
+    const infoCompress = document.getElementById('compress-file-info');
+    const filenameCompress = document.getElementById('compress-filename');
+    const pagecountCompress = document.getElementById('compress-pagecount');
+    const levelCompress = document.getElementById('compress-level');
+
+    let compressFileId = null;
+
+    browseCompress.addEventListener('click', () => inputCompress.click());
+    dropCompress.addEventListener('click', (e) => { if (e.target !== browseCompress) inputCompress.click(); });
+    
+    setupDropZone(dropCompress, inputCompress, async (files) => {
+        if(files.length > 0) handleCompressFile(files[0]);
+    });
+
+    async function handleCompressFile(file) {
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+            showStatus('compress', 'Please select a PDF file.', 'error');
+            return;
+        }
+        showStatus('compress', 'Uploading...', 'info');
+        btnCompress.disabled = true;
+        try {
+            const data = await uploadFile(file);
+            compressFileId = data.id;
+            
+            const infoRes = await fetch('/info', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file: compressFileId })
+            });
+            if (infoRes.ok) {
+                const infoData = await infoRes.json();
+                filenameCompress.textContent = file.name;
+                pagecountCompress.textContent = `Total Pages: ${infoData.pages}`;
+                infoCompress.classList.remove('hidden');
+                btnCompress.disabled = false;
+                hideStatus('compress');
+            } else {
+                throw new Error('Could not read PDF info');
+            }
+        } catch (e) {
+            showStatus('compress', e.message, 'error');
+        }
+    }
+
+    btnCompress.addEventListener('click', async () => {
+        if (!compressFileId) return;
+        showStatus('compress', 'Compressing...', 'info');
+        btnCompress.disabled = true;
+        try {
+            const response = await fetch('/compress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ file: compressFileId, level: levelCompress.value })
+            });
+
+            if (response.ok) {
+                triggerDownload(await response.blob(), `Compressed_${filenameCompress.textContent}`);
+                showStatus('compress', 'Compression complete!', 'success');
+            } else {
+                const err = await response.json();
+                showStatus('compress', err.error || 'Compression failed', 'error');
+            }
+        } catch (e) {
+            showStatus('compress', 'Error compressing PDF', 'error');
+        } finally {
+            btnCompress.disabled = false;
+        }
+    });
 
     // --- Generic Multi-File Logic (Merge & Extract+Merge) ---
     function setupMultiFile(tabSuffix, templateId) {

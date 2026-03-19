@@ -1,3 +1,6 @@
+import os
+import zipfile
+import subprocess
 from pypdf import PdfWriter, PdfReader
 
 def parse_ranges(ranges_str, total_pages):
@@ -84,3 +87,55 @@ def extract_and_merge(files_data, output_path):
     with open(output_path, "wb") as output_file:
         writer.write(output_file)
     writer.close()
+
+def split_pages(pdf_path, ranges_str, output_zip_path):
+    """
+    Extracts each range separately and saves them into a ZIP file.
+    """
+    reader = PdfReader(pdf_path)
+    total_pages = len(reader.pages)
+    
+    parts = [p.strip() for p in ranges_str.split(',') if p.strip()]
+    if not parts:
+        parts = [f"1-{total_pages}"]
+        
+    with zipfile.ZipFile(output_zip_path, 'w') as zipf:
+        for i, part in enumerate(parts):
+            pages_to_extract = parse_ranges(part, total_pages)
+            if not pages_to_extract:
+                continue
+                
+            writer = PdfWriter()
+            for p_num in pages_to_extract:
+                writer.add_page(reader.pages[p_num])
+                
+            temp_pdf_name = f"part_{i+1}_{part.replace(' ', '')}.pdf"
+            temp_pdf_path = os.path.join(os.path.dirname(output_zip_path), temp_pdf_name)
+            with open(temp_pdf_path, "wb") as output_file:
+                writer.write(output_file)
+            writer.close()
+            
+            zipf.write(temp_pdf_path, temp_pdf_name)
+            os.remove(temp_pdf_path)
+
+def compress_pdf(input_path, output_path, level):
+    """
+    Compresses a PDF using Ghostscript based on the specified level.
+    """
+    gs_settings = {
+        'low': '/screen',
+        'medium': '/ebook',
+        'high': '/printer'
+    }
+    setting = gs_settings.get(level, '/screen')
+    cmd = [
+        'gs', '-sDEVICE=pdfwrite', '-dCompatibilityLevel=1.4',
+        f'-dPDFSETTINGS={setting}', '-dNOPAUSE', '-dQUIET', '-dBATCH',
+        f'-sOutputFile={output_path}', input_path
+    ]
+    try:
+        subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError:
+        raise Exception("Ghostscript is not installed on this system.")
+    except subprocess.CalledProcessError as e:
+        raise Exception(f"Compression failed: {e.stderr.decode('utf-8')}")

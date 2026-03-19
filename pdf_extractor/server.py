@@ -3,7 +3,7 @@ import uuid
 import tempfile
 from flask import Flask, render_template, request, send_file, jsonify
 from werkzeug.utils import secure_filename
-from pdf_utils import merge_pdfs, extract_pages, extract_and_merge
+from pdf_utils import merge_pdfs, extract_pages, extract_and_merge, split_pages, compress_pdf
 from pypdf import PdfReader
 
 app = Flask(__name__)
@@ -107,6 +107,7 @@ def extract():
         
     file_id = data['file']
     ranges_str = data.get('ranges', '')
+    mode = data.get('mode', 'extract')
     
     clean_fid = secure_filename(file_id)
     path = os.path.join(app.config['UPLOAD_FOLDER'], clean_fid)
@@ -114,17 +115,60 @@ def extract():
     if not os.path.exists(path):
         return jsonify({'error': f'File {clean_fid} not found on server'}), 404
         
-    extracted_path = os.path.join(tempfile.gettempdir(), f'extracted_{uuid.uuid4().hex}.pdf')
+    if mode == 'split':
+        output_path = os.path.join(tempfile.gettempdir(), f'split_{uuid.uuid4().hex}.zip')
+        try:
+            split_pages(path, ranges_str, output_path)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+            
+        return send_file(
+            output_path, 
+            as_attachment=True, 
+            download_name='split.zip', 
+            mimetype='application/zip'
+        )
+    else:
+        extracted_path = os.path.join(tempfile.gettempdir(), f'extracted_{uuid.uuid4().hex}.pdf')
+        
+        try:
+            extract_pages(path, ranges_str, extracted_path)
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+            
+        return send_file(
+            extracted_path, 
+            as_attachment=True, 
+            download_name='extracted.pdf', 
+            mimetype='application/pdf'
+        )
+
+@app.route('/compress', methods=['POST'])
+def compress():
+    data = request.json
+    if not data or 'file' not in data:
+        return jsonify({'error': 'No file specified'}), 400
+        
+    file_id = data['file']
+    level = data.get('level', 'medium')
+    
+    clean_fid = secure_filename(file_id)
+    path = os.path.join(app.config['UPLOAD_FOLDER'], clean_fid)
+    
+    if not os.path.exists(path):
+        return jsonify({'error': f'File {clean_fid} not found on server'}), 404
+        
+    output_path = os.path.join(tempfile.gettempdir(), f'compressed_{uuid.uuid4().hex}.pdf')
     
     try:
-        extract_pages(path, ranges_str, extracted_path)
+        compress_pdf(path, output_path, level)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
         
     return send_file(
-        extracted_path, 
+        output_path, 
         as_attachment=True, 
-        download_name='extracted.pdf', 
+        download_name='compressed.pdf', 
         mimetype='application/pdf'
     )
 
