@@ -1,6 +1,26 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Operating System Files
 .DS_Store
+Thumbs.db
+
+# Temporary Application Storage
+.temp_storage/
+split_staging_*/
+
+# Local I/O Directories
 input/
 output/
 ready to print/
+
+# Local Output Documents
+*.docx
+
+# Environment
+.env
+.venv
+env/
+venv/

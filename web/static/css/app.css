@@ -1,0 +1,388 @@
+/* ==========================================================================
+   PDF Toolkit Pro - Advanced Black & White Glassmorphic Design System
+   Strictly Light Mode with Thin Roboto Typography
+   ========================================================================== */
+
+:root {
+    --font-roboto: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Strictly Light Mode - Monochrome Palette */
+    --bg-page: #f8f9fa;
+    --bg-page-secondary: #f1f3f5;
+    
+    /* Glass Tokens */
+    --glass-card-bg: rgba(255, 255, 255, 0.75);
+    --glass-nested-bg: rgba(255, 255, 255, 0.5);
+    --glass-input-bg: rgba(255, 255, 255, 0.65);
+    --glass-hover-bg: rgba(255, 255, 255, 0.88);
+    
+    /* Hairline Glass Borders */
+    --border-glass: rgba(0, 0, 0, 0.08);
+    --border-glass-highlight: rgba(255, 255, 255, 0.95);
+    --border-glass-hover: rgba(0, 0, 0, 0.22);
+    
+    /* Pure Monochrome Text Hierarchy */
+    --text-pure-black: #000000;
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --text-muted: #888888;
+    --text-subtle: #aaaaaa;
+
+    /* Shadows & Glass Refractions */
+    --glass-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.07),
+        0 10px 20px -8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.95),
+        inset 0 -1px 2px 0 rgba(0, 0, 0, 0.03);
+        
+    --glass-nested-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-roboto);
+    font-weight: 300;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Atmospheric Ambient Glass Backdrops (Provides visible refraction for frosted glass) */
+.ambient-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.ambient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+}
+
+.ambient-orb-1 {
+    width: 650px;
+    height: 650px;
+    top: -150px;
+    left: 10%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.045) 0%, rgba(0, 0, 0, 0.01) 60%, transparent 80%);
+}
+
+.ambient-orb-2 {
+    width: 550px;
+    height: 550px;
+    bottom: -100px;
+    right: 5%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.008) 60%, transparent 80%);
+}
+
+.ambient-orb-3 {
+    width: 400px;
+    height: 400px;
+    top: 40%;
+    right: 35%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.03) 0%, transparent 70%);
+}
+
+/* ==========================================================================
+   Advanced Glassmorphism Classes
+   ========================================================================== */
+
+/* Main Glass Card */
+.glass-panel {
+    background: var(--glass-card-bg);
+    backdrop-filter: blur(36px) saturate(180%);
+    -webkit-backdrop-filter: blur(36px) saturate(180%);
+    border: 1px solid var(--border-glass);
+    border-top: 1px solid var(--border-glass-highlight);
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    z-index: 10;
+}
+
+/* Header Glass */
+.glass-header {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border-bottom: 1px solid var(--border-glass);
+}
+
+/* Nested Glass Container (Sections, Cards, Info Panels) */
+.glass-nested {
+    background: var(--glass-nested-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    box-shadow: var(--glass-nested-shadow);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-nested:hover {
+    background: var(--glass-hover-bg);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Advanced Glass Drop Zone */
+.glass-drop-zone {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px dashed rgba(0, 0, 0, 0.14);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    cursor: pointer;
+}
+
+.glass-drop-zone:hover, .glass-drop-zone.drag-active {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: var(--text-pure-black);
+    border-style: solid;
+    box-shadow: 
+        0 15px 35px -10px rgba(0, 0, 0, 0.08),
+        inset 0 1px 2px rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+}
+
+.glass-drop-zone.drag-active {
+    transform: scale(1.01);
+}
+
+/* Glass Inputs */
+.glass-input {
+    background: var(--glass-input-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    color: var(--text-primary);
+    font-family: var(--font-roboto);
+    font-weight: 300;
+    transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--text-pure-black);
+    box-shadow: 
+        0 0 0 3px rgba(0, 0, 0, 0.05),
+        inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    outline: none;
+}
+
+/* ==========================================================================
+   Thin Typography Overrides
+   ========================================================================== */
+
+h1, h2, h3, h4 {
+    font-family: var(--font-roboto);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: var(--text-pure-black);
+}
+
+.font-thin-roboto {
+    font-family: var(--font-roboto);
+    font-weight: 100;
+}
+
+.font-light-roboto {
+    font-family: var(--font-roboto);
+    font-weight: 300;
+}
+
+.font-regular-roboto {
+    font-family: var(--font-roboto);
+    font-weight: 400;
+}
+
+.font-medium-roboto {
+    font-family: var(--font-roboto);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Tabs & Buttons (Monochrome Minimalist)
+   ========================================================================== */
+
+.tab-btn {
+    font-family: var(--font-roboto);
+    font-weight: 300;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: var(--text-pure-black);
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn.active {
+    color: var(--text-pure-black) !important;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--text-pure-black);
+    border-radius: 2px;
+}
+
+/* Primary High-Contrast Action Button */
+.btn-action-primary {
+    background: var(--text-pure-black);
+    color: #ffffff;
+    font-family: var(--font-roboto);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    border: 1px solid var(--text-pure-black);
+    box-shadow: 
+        0 6px 20px -4px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-action-primary:hover:not(:disabled) {
+    background: #222222;
+    transform: translateY(-1.5px);
+    box-shadow: 
+        0 10px 25px -4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-action-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-action-primary:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Secondary Frosted Button */
+.btn-frosted {
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--text-primary);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1);
+    transition: all 0.2s ease;
+}
+
+.btn-frosted:hover {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+/* Spinners */
+.spinner-bw {
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 0.65s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   Monochrome Toast Notifications
+   ========================================== */
+#toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 420px;
+}
+
+.toast {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-left: 4px solid var(--text-pure-black);
+    color: var(--text-pure-black);
+    padding: 14px 20px;
+    border-radius: 14px;
+    box-shadow: 
+        0 16px 36px -8px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-roboto);
+    font-size: 0.88rem;
+    font-weight: 400;
+    animation: toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
+}
+
+@keyframes toast-in {
+    from {
+        transform: translateY(12px) scale(0.96);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}

@@ -1,2 +1,14 @@
-pypdf>=3.0.0
+# Core PDF Engine
+pypdf>=5.0.0
+pdf2docx>=0.5.12
+reportlab>=4.0.0
+
+# Web Application
+Flask>=3.0.0
+Werkzeug>=3.0.0
+
+# Desktop GUI (macOS & Windows Drag-and-Drop)
 tkinterdnd2>=0.3.0
+
+# Utilities & HTTP Client
+requests>=2.28.0

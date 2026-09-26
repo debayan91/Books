@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Toolkit Pro — Advanced Glassmorphic Suite</title>
+    
+    <!-- Thin Roboto Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SortableJS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Advanced Glassmorphic B&W Design System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
+
+    <!-- Atmospheric Glass Refraction Background -->
+    <div class="ambient-backdrop">
+        <div class="ambient-orb ambient-orb-1"></div>
+        <div class="ambient-orb ambient-orb-2"></div>
+        <div class="ambient-orb ambient-orb-3"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="glass-header sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white shadow-md">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="text-base font-light text-black tracking-tight">PDF Toolkit <span class="font-normal">Pro</span></h1>
+                    <span class="text-[11px] font-normal tracking-wide px-2 py-0.5 rounded-full bg-black/5 text-zinc-700 border border-black/10">v{{ version }}</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2 text-xs font-light text-zinc-600 bg-white/70 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-black/10 shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black animate-pulse"></span>
+                    <span>100% Offline & Private</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full relative z-10">
+        
+        <!-- Primary Glassmorphic Panel -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-10">
+            
+            <!-- Tool Navigation Tabs -->
+            <div class="flex overflow-x-auto gap-2 pb-4 mb-8 border-b border-black/10 text-xs tracking-wide">
+                <button data-tab="extract" class="tab-btn active px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                    <span>Extract & Split</span>
+                </button>
+                <button data-tab="merge" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    <span>Merge PDFs</span>
+                </button>
+                <button data-tab="extract-merge" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    <span>Extract & Merge</span>
+                </button>
+                <button data-tab="3up" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>3-Up Print Prep</span>
+                </button>
+                <button data-tab="docx" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span>PDF to Word</span>
+                </button>
+                <button data-tab="compress" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    <span>Compress PDF</span>
+                </button>
+                <button data-tab="inspector" class="tab-btn px-4 py-2.5 rounded-xl flex items-center space-x-2 whitespace-nowrap">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>Inspector</span>
+                </button>
+            </div>
+
+            <!-- ==========================================
+                 TAB 1: EXTRACT & SPLIT
+                 ========================================== -->
+            <div id="panel-extract" class="tab-panel">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-7">
+                        <div id="drop-extract" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-extract" accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop your PDF here, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Accepts single PDF documents up to 200MB</p>
+                        </div>
+
+                        <!-- Loaded File Glass Card -->
+                        <div id="card-extract" class="hidden mt-4 p-4 rounded-2xl glass-nested flex items-center justify-between">
+                            <div class="flex items-center space-x-3.5 truncate">
+                                <div class="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center font-normal text-xs">PDF</div>
+                                <div class="truncate">
+                                    <p id="filename-extract" class="text-xs font-normal text-black truncate">document.pdf</p>
+                                    <div class="flex items-center space-x-2 text-[11px] font-light text-zinc-500 mt-0.5">
+                                        <span id="pages-extract">Pages: --</span>
+                                        <span>•</span>
+                                        <span id="size-extract">Size: --</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="clear-extract" class="text-xs font-light text-zinc-500 hover:text-black px-2 py-1 rounded">Change</button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-normal text-zinc-700 tracking-wide uppercase mb-2">Page Range Specification</label>
+                                <input type="text" id="ranges-extract" placeholder="e.g. 1-5, 8, 10-12 (or empty for all)" class="glass-input w-full rounded-xl px-4 py-3 text-xs">
+                                <p class="text-[11px] font-light text-zinc-400 mt-1.5">Comma-separated ranges or single page numbers.</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-normal text-zinc-700 tracking-wide uppercase mb-2">Extraction Mode</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="glass-nested flex items-center space-x-3 p-3.5 rounded-xl cursor-pointer hover:border-black/30 transition-all">
+                                        <input type="radio" name="mode-extract" value="extract" checked class="text-black focus:ring-black">
+                                        <div>
+                                            <p class="text-xs font-normal text-black">Single PDF</p>
+                                            <p class="text-[10px] font-light text-zinc-500">Pages unified into one file</p>
+                                        </div>
+                                    </label>
+                                    <label class="glass-nested flex items-center space-x-3 p-3.5 rounded-xl cursor-pointer hover:border-black/30 transition-all">
+                                        <input type="radio" name="mode-extract" value="split" class="text-black focus:ring-black">
+                                        <div>
+                                            <p class="text-xs font-normal text-black">Split to ZIP</p>
+                                            <p class="text-[10px] font-light text-zinc-500">Archive of separate PDFs</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btn-run-extract" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Execute Extraction</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 2: MERGE PDFS
+                 ========================================== -->
+            <div id="panel-merge" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5">
+                        <div id="drop-merge" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-merge" multiple accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop multiple PDFs, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Select 2 or more documents to combine</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-xs font-normal text-zinc-700 uppercase tracking-wide">Merge Sequence (Drag to Reorder)</label>
+                                <span id="merge-count-badge" class="text-xs font-light text-zinc-500">0 files added</span>
+                            </div>
+
+                            <ul id="list-merge" class="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                                <li id="empty-merge" class="text-center py-12 border border-dashed border-black/10 rounded-2xl text-xs font-light text-zinc-400">
+                                    No documents added. Drop PDF files on the left to begin.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button id="btn-run-merge" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Merge Documents</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 3: EXTRACT & MERGE
+                 ========================================== -->
+            <div id="panel-extract-merge" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5">
+                        <div id="drop-em" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-em" multiple accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop PDFs, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Specify custom ranges per document and merge</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-xs font-normal text-zinc-700 uppercase tracking-wide">Documents & Custom Ranges</label>
+                                <span id="em-count-badge" class="text-xs font-light text-zinc-500">0 files added</span>
+                            </div>
+
+                            <ul id="list-em" class="space-y-3 max-h-[320px] overflow-y-auto pr-1">
+                                <li id="empty-em" class="text-center py-12 border border-dashed border-black/10 rounded-2xl text-xs font-light text-zinc-400">
+                                    No documents added yet.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button id="btn-run-em" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Extract & Merge All</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 4: 3-UP A4 PRINT PREP
+                 ========================================== -->
+            <div id="panel-3up" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-7">
+                        <div id="drop-3up" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-3up" accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop your book/document here, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Converts documents into 3-Up A4 landscape sheets for 66.7% paper savings</p>
+                        </div>
+
+                        <!-- Loaded File Card -->
+                        <div id="card-3up" class="hidden mt-4 p-4 rounded-2xl glass-nested flex items-center justify-between">
+                            <div class="flex items-center space-x-3.5 truncate">
+                                <div class="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center font-normal text-xs">PDF</div>
+                                <div class="truncate">
+                                    <p id="filename-3up" class="text-xs font-normal text-black truncate">book.pdf</p>
+                                    <div class="flex items-center space-x-2 text-[11px] font-light text-zinc-500 mt-0.5">
+                                        <span id="pages-3up">Pages: --</span>
+                                        <span>•</span>
+                                        <span id="estimate-3up">Estimated sheets: --</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="clear-3up" class="text-xs font-light text-zinc-500 hover:text-black px-2 py-1 rounded">Change</button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex flex-col justify-between">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-normal text-zinc-700 uppercase tracking-wide mb-2">Pages Per A4 Sheet</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button type="button" class="btn-nup glass-nested p-3.5 rounded-xl text-center text-xs font-light" data-cols="2">2-Up</button>
+                                    <button type="button" class="btn-nup p-3.5 rounded-xl text-center text-xs font-normal bg-black text-white border border-black shadow-sm" data-cols="3">3-Up (Standard)</button>
+                                    <button type="button" class="btn-nup glass-nested p-3.5 rounded-xl text-center text-xs font-light" data-cols="4">4-Up</button>
+                                </div>
+                            </div>
+
+                            <div class="p-5 rounded-2xl glass-nested space-y-3">
+                                <div class="flex items-center justify-between text-xs font-light">
+                                    <span class="text-zinc-500">Target Format</span>
+                                    <span class="font-normal text-black">A4 Landscape (842 × 595 pt)</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs font-light">
+                                    <span class="text-zinc-500">Arrangement</span>
+                                    <span class="font-normal text-black">Horizontal side-by-side</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs font-light pt-1 border-t border-black/5">
+                                    <span class="text-zinc-500">Paper Reduction</span>
+                                    <span id="savings-badge-3up" class="font-normal text-black bg-black/5 px-2 py-0.5 rounded-full border border-black/10">~66.7% fewer pages</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btn-run-3up" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Generate 3-Up Print PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 5: PDF TO WORD (DOCX)
+                 ========================================== -->
+            <div id="panel-docx" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-7">
+                        <div id="drop-docx" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-docx" accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop your PDF here, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Converts native text, tables, and images into an editable Word (.docx) document</p>
+                        </div>
+
+                        <!-- Loaded File Card -->
+                        <div id="card-docx" class="hidden mt-4 p-4 rounded-2xl glass-nested flex items-center justify-between">
+                            <div class="flex items-center space-x-3.5 truncate">
+                                <div class="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center font-normal text-xs">DOCX</div>
+                                <div class="truncate">
+                                    <p id="filename-docx" class="text-xs font-normal text-black truncate">document.pdf</p>
+                                    <p id="pages-docx" class="text-[11px] font-light text-zinc-500 mt-0.5">Pages: --</p>
+                                </div>
+                            </div>
+                            <button id="clear-docx" class="text-xs font-light text-zinc-500 hover:text-black px-2 py-1 rounded">Change</button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex flex-col justify-between">
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-normal text-zinc-700 uppercase tracking-wide mb-2">Optional Page Range</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <span class="text-[10px] font-light text-zinc-400">Start Page (1-based)</span>
+                                        <input type="number" id="start-docx" placeholder="1" min="1" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] font-light text-zinc-400">End Page (blank for all)</span>
+                                        <input type="number" id="end-docx" placeholder="End" min="1" class="glass-input w-full rounded-xl px-3 py-2 text-xs">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-5 rounded-2xl glass-nested text-xs font-light text-zinc-500">
+                                <p class="font-normal text-black mb-1">Local Conversion Engine</p>
+                                <p>Analyzes text flow, tables, and shapes directly on your machine without cloud dependencies.</p>
+                            </div>
+                        </div>
+
+                        <button id="btn-run-docx" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Convert to Microsoft Word</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 6: COMPRESS PDF
+                 ========================================== -->
+            <div id="panel-compress" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-7">
+                        <div id="drop-compress" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-compress" accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop PDF to compress, or <span class="font-normal underline cursor-pointer">browse</span></h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Shrinks document footprint while preserving text fidelity</p>
+                        </div>
+
+                        <!-- Loaded File Card -->
+                        <div id="card-compress" class="hidden mt-4 p-4 rounded-2xl glass-nested flex items-center justify-between">
+                            <div class="flex items-center space-x-3.5 truncate">
+                                <div class="w-9 h-9 rounded-lg bg-black text-white flex items-center justify-center font-normal text-xs">PDF</div>
+                                <div class="truncate">
+                                    <p id="filename-compress" class="text-xs font-normal text-black truncate">document.pdf</p>
+                                    <div class="flex items-center space-x-2 text-[11px] font-light text-zinc-500 mt-0.5">
+                                        <span id="pages-compress">Pages: --</span>
+                                        <span>•</span>
+                                        <span id="size-compress">Current size: --</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="clear-compress" class="text-xs font-light text-zinc-500 hover:text-black px-2 py-1 rounded">Change</button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <label class="block text-xs font-normal text-zinc-700 uppercase tracking-wide">Compression Level</label>
+                            
+                            <div class="space-y-2.5">
+                                <label class="glass-nested flex items-center justify-between p-3.5 rounded-xl cursor-pointer hover:border-black/30 transition-all">
+                                    <div class="flex items-center space-x-3">
+                                        <input type="radio" name="level-compress" value="low" class="text-black focus:ring-black">
+                                        <div>
+                                            <p class="text-xs font-normal text-black">Maximum Compression (Screen 72 DPI)</p>
+                                            <p class="text-[10px] font-light text-zinc-500">Smallest file size for email & sharing</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="glass-nested flex items-center justify-between p-3.5 rounded-xl cursor-pointer border-black/40 bg-white/90 shadow-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <input type="radio" name="level-compress" value="medium" checked class="text-black focus:ring-black">
+                                        <div>
+                                            <p class="text-xs font-normal text-black">Recommended (eBook 150 DPI)</p>
+                                            <p class="text-[10px] font-light text-zinc-500">Optimal balance of visual sharpness & reduction</p>
+                                        </div>
+                                    </div>
+                                </label>
+
+                                <label class="glass-nested flex items-center justify-between p-3.5 rounded-xl cursor-pointer hover:border-black/30 transition-all">
+                                    <div class="flex items-center space-x-3">
+                                        <input type="radio" name="level-compress" value="high" class="text-black focus:ring-black">
+                                        <div>
+                                            <p class="text-xs font-normal text-black">High Quality (Print 300 DPI)</p>
+                                            <p class="text-[10px] font-light text-zinc-500">High graphic fidelity preserving details</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="btn-run-compress" disabled class="btn-action-primary w-full mt-6 py-3.5 px-6 rounded-xl text-xs flex items-center justify-center space-x-2">
+                            <span>Compress Document</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 TAB 7: PDF INSPECTOR
+                 ========================================== -->
+            <div id="panel-inspector" class="tab-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-5">
+                        <div id="drop-inspector" class="glass-drop-zone rounded-2xl p-10 text-center flex flex-col items-center justify-center min-h-[240px]">
+                            <input type="file" id="input-inspector" accept=".pdf" class="hidden">
+                            <div class="w-12 h-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 border border-black/10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <h3 class="text-base font-light text-black">Drop any PDF to inspect</h3>
+                            <p class="text-xs font-light text-zinc-500 mt-1">Physical dimensions, paper size, encryption, producer</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7">
+                        <div id="inspector-placeholder" class="text-center py-20 border border-dashed border-black/10 rounded-2xl text-xs font-light text-zinc-400">
+                            Upload a document to view deep metadata and physical properties.
+                        </div>
+
+                        <div id="inspector-content" class="hidden space-y-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div class="p-4 rounded-xl glass-nested">
+                                    <p class="text-[10px] font-normal uppercase text-zinc-500">Total Pages</p>
+                                    <p id="insp-pages" class="text-lg font-light text-black mt-0.5">--</p>
+                                </div>
+                                <div class="p-4 rounded-xl glass-nested">
+                                    <p class="text-[10px] font-normal uppercase text-zinc-500">File Size</p>
+                                    <p id="insp-size" class="text-lg font-light text-black mt-0.5">--</p>
+                                </div>
+                                <div class="p-4 rounded-xl glass-nested">
+                                    <p class="text-[10px] font-normal uppercase text-zinc-500">Paper Format</p>
+                                    <p id="insp-format" class="text-lg font-light text-black mt-0.5">--</p>
+                                </div>
+                                <div class="p-4 rounded-xl glass-nested">
+                                    <p class="text-[10px] font-normal uppercase text-zinc-500">Encryption</p>
+                                    <p id="insp-encrypted" class="text-lg font-light text-black mt-0.5">None</p>
+                                </div>
+                            </div>
+
+                            <div class="p-5 rounded-2xl glass-nested">
+                                <h4 class="text-xs font-normal text-black uppercase tracking-wider mb-3">Document Properties</h4>
+                                <dl class="divide-y divide-black/5 text-xs font-light">
+                                    <div class="py-2.5 flex justify-between"><dt class="text-zinc-500">Title</dt><dd id="insp-title" class="font-normal text-black">--</dd></div>
+                                    <div class="py-2.5 flex justify-between"><dt class="text-zinc-500">Author</dt><dd id="insp-author" class="font-normal text-black">--</dd></div>
+                                    <div class="py-2.5 flex justify-between"><dt class="text-zinc-500">Producer</dt><dd id="insp-producer" class="font-normal text-black">--</dd></div>
+                                    <div class="py-2.5 flex justify-between"><dt class="text-zinc-500">Page Dimensions</dt><dd id="insp-dims" class="font-normal text-black">--</dd></div>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Minimalist Footer -->
+    <footer class="py-8 text-center text-xs font-light text-zinc-400 relative z-10">
+        <p>PDF Toolkit Pro &bull; Strictly Offline</p>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
